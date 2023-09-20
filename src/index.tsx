@@ -1,11 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import "./style/popup.scss"
+import "./style/popup.scss";
+import Popup from "./components/Popup";
 
 
 ReactDOM.render(
     <React.StrictMode>
-        hoge
+        <Popup/>
     </React.StrictMode>,
     document.getElementById('root')
 );

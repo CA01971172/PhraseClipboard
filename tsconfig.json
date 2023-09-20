@@ -1,12 +1,18 @@
 {
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "noImplicitAny": true,
-    "module": "es6",
-    "target": "es5",
-    "allowJs": true,
-    "jsx": "react",
-    "moduleResolution": "node"
-  },
-  "files": ["src/index.tsx"]
+  "allowSyntheticDefaultImports": true,
+  "noImplicitAny": true,
+  "module": "es6",
+  "target": "es5",
+  "allowJs": true,
+  "strict": true,
+  "sourceMap": true,
+  "jsx": "react",
+  "moduleResolution": "node",
+  "lib": [
+    "ES2023",
+    "DOM"
+  ]
+},
+"files": ["src/index.tsx"]
 }
