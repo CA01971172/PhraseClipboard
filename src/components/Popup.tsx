@@ -9,7 +9,8 @@ export default function Popup(){
     //     addTab,
     //     deleteTab,
     //     renameTab,
-    //     setTexts
+    //     setTexts,
+    //     saveTabData
     // } = useContext(DataContext);
 
     return (
