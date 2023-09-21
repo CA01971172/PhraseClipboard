@@ -1,5 +1,5 @@
 {
-    "name": "PhraseClipper",
+    "name": "Phrase Clipboard",
     "description": "保存した定型文をクリップボードにコピー",
     "version": "1.0",
     "manifest_version": 3,
