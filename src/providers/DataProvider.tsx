@@ -11,7 +11,7 @@ type DataInfo = {
 // 個別タブの型
 type TabInfo = {
     tabName: string;
-    messages: string[];
+    texts: string[];
 };
 
 /* 関数定義 */
@@ -46,7 +46,7 @@ type DataContextInfo = {
     addTab: (tabName: string) => void;
     deleteTab: (tabIndex: number) => void;
     renameTab: (tabName: string, tabIndex: number) => void;
-    setMessages: (text: string, tabIndex: number) => void;
+    setTexts: (text: string, tabIndex: number) => void;
 }
 
 const initialContext: DataContextInfo = {
@@ -54,7 +54,7 @@ const initialContext: DataContextInfo = {
     addTab: () => {},
     deleteTab: () => {},
     renameTab: () => {},
-    setMessages: () => {}
+    setTexts: () => {}
 };
 
 export const DataContext = createContext<DataContextInfo>(initialContext);
@@ -74,7 +74,7 @@ export function DataProvider({children}: {children: ReactNode}){
     function addTab(tabName: string): void{
         const newTab: TabInfo = {
             tabName,
-            messages: []
+            texts: []
         };
         setTabArray([...tabArray, newTab]);
     }
@@ -98,13 +98,13 @@ export function DataProvider({children}: {children: ReactNode}){
         )
     }
 
-    // 文字列を受け取って、文字列型配列としてタブのmessagesに代入する関数
-    function setMessages(text: string, tabIndex: number): void{
-        const messages: string[] = convertTextToArray(text);
+    // 文字列を受け取って、文字列型配列としてタブのtextsに代入する関数
+    function setTexts(text: string, tabIndex: number): void{
+        const texts: string[] = convertTextToArray(text);
         setTabArray(
             tabArray.map((tab, index) => {
                 if(index === tabIndex){
-                    tab.messages = messages;
+                    tab.texts = texts;
                 }
                 return tab;
             })
@@ -118,7 +118,7 @@ export function DataProvider({children}: {children: ReactNode}){
                 addTab,
                 deleteTab,
                 renameTab,
-                setMessages
+                setTexts
             }}
         >
             {children}
