@@ -40,6 +40,13 @@ export function convertArrayToText(textArray: string[]): string{
     return textArray.join("\n");
 }
 
+// クリップボードにテキストをコピーする関数
+function copyToClipboard(text: string): void{
+    if(navigator.clipboard){
+        navigator.clipboard.writeText(text);
+    }
+}
+
 /* Provider定義 */
 type DataContextInfo = {
     tabArray: TabInfo[];
@@ -47,6 +54,7 @@ type DataContextInfo = {
     deleteTab: (tabIndex: number) => void;
     renameTab: (tabName: string, tabIndex: number) => void;
     setTexts: (text: string, tabIndex: number) => void;
+    copyText: (tabIndex: number, textIndex: number) => void;
     saveTabData: () => Promise<DataInfo>;
 }
 
@@ -56,6 +64,7 @@ const initialContext: DataContextInfo = {
     deleteTab: () => {},
     renameTab: () => {},
     setTexts: () => {},
+    copyText: () => {},
     saveTabData: () => Promise.resolve({})
 };
 
@@ -113,6 +122,12 @@ export function DataProvider({children}: {children: ReactNode}){
         )
     }
 
+    // クリップボードにテキストをコピーする関数
+    function copyText(tabIndex: number, textIndex: number): void{
+        const text: string = tabArray[tabIndex].texts[textIndex];
+        copyToClipboard(text);
+    }
+
     // chrome.storageに現在のデータを保存する関数
     async function saveTabData(): Promise<DataInfo>{
         return new Promise<DataInfo>((resolve, reject) => {
@@ -140,6 +155,7 @@ export function DataProvider({children}: {children: ReactNode}){
                 deleteTab,
                 renameTab,
                 setTexts,
+                copyText,
                 saveTabData
             }}
         >
