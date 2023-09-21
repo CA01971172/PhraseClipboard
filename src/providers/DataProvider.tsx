@@ -82,7 +82,7 @@ export function DataProvider({children}: {children: ReactNode}){
     }, []);
 
     // タブを追加する関数
-    function addTab(tabName: string): void{
+    function addTab(tabName: string = "タブ"): void{
         const newTab: TabInfo = {
             tabName,
             texts: []
