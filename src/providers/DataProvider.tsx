@@ -16,7 +16,7 @@ type TabInfo = {
 
 /* 関数定義 */
 // chrome.storageからタブのデータを取得する関数
-async function getData(): Promise<TabInfo[]>{
+async function getTabData(): Promise<TabInfo[]>{
     let initialData: TabInfo[] = []; //デフォルト値
     return new Promise<TabInfo[]>((resolve, reject) => {
         chrome.storage.local.get(["data"], function(response: DataInfo){
@@ -47,6 +47,7 @@ type DataContextInfo = {
     deleteTab: (tabIndex: number) => void;
     renameTab: (tabName: string, tabIndex: number) => void;
     setTexts: (text: string, tabIndex: number) => void;
+    saveTabData: () => Promise<DataInfo>;
 }
 
 const initialContext: DataContextInfo = {
@@ -54,7 +55,8 @@ const initialContext: DataContextInfo = {
     addTab: () => {},
     deleteTab: () => {},
     renameTab: () => {},
-    setTexts: () => {}
+    setTexts: () => {},
+    saveTabData: () => Promise.resolve({})
 };
 
 export const DataContext = createContext<DataContextInfo>(initialContext);
@@ -65,7 +67,7 @@ export function DataProvider({children}: {children: ReactNode}){
 
     // storageのデータを取得し、タブのデータを初期化する
     useEffect(() => {
-        getData().then((response: TabInfo[]) => {
+        getTabData().then((response: TabInfo[]) => {
             setTabArray(response);
         });
     }, []);
@@ -111,6 +113,25 @@ export function DataProvider({children}: {children: ReactNode}){
         )
     }
 
+    // chrome.storageに現在のデータを保存する関数
+    async function saveTabData(): Promise<DataInfo>{
+        return new Promise<DataInfo>((resolve, reject) => {
+            try{
+                // chrome.storageに現在のデータを保存する
+                const sendData: DataInfo = {
+                    data: {
+                        tabs: tabArray
+                    }
+                };
+                chrome.storage.local.set(sendData, function() {
+                    resolve(sendData);
+                });
+            }catch(error){
+                throw error;
+            }
+        });
+    }
+
     return (
         <DataContext.Provider
             value={{
@@ -118,7 +139,8 @@ export function DataProvider({children}: {children: ReactNode}){
                 addTab,
                 deleteTab,
                 renameTab,
-                setTexts
+                setTexts,
+                saveTabData
             }}
         >
             {children}
