@@ -32,6 +32,7 @@ async function getTabData(): Promise<TabInfo[]>{
         }catch(error){
             // chrome.storageへアクセスできない場合のエラーハンドリング
             console.error("chrome.storageへのアクセスに失敗しました\n", error);
+            resolve(initialData);
         }
     });
 }
