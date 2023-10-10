@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
+import { DataContext } from "./../providers/DataProvider" 
 
-type TabInfo = { tabName:string, texts:string };
-function tabArray(){
-const [ tabArray, setTabArray] = useState<TabInfo[]>([
-{ tabName:"tabName1", texts:"texts1" }])
-return ( 
-<div></div> 
-)
-}
+const TabContext = useContext(DataContext);
 
-export default tabArray
+const TabComponent = () =>{
+    const { tabArray } = TabContext;
+    
+    return (
+       <ul>
+            {Object.values(tabArray).map((tabData) => (
+                <li>{tabData.tabName}</li>
+            ))}
+       </ul>
+    );
+  }
