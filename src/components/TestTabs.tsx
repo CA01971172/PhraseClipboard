@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { DataContext } from "../providers/DataProvider" 
 
-export default function TabArray (){
+export default function TestTabs (){
     const { tabArray }= useContext(DataContext);
     const [tabs, setTabArray] = useState(['タブ'])
     

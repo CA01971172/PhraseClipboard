@@ -1,7 +1,7 @@
 import React from 'react';
 // import { useContext } from "react";
 // import { DataContext } from '../providers/DataProvider';
-import TabArray from "./TabArray"
+import TestTabs from "./TestTabs"
 
 export default function Popup(){
     // // タブのデータを管理するcontext
@@ -17,7 +17,7 @@ export default function Popup(){
 
     return (
         <div>
-            <TabArray/>
+            <TestTabs/>
         </div>
     );
 }
