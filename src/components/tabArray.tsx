@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
-import { DataContext } from "./../providers/DataProvider" 
+import { DataContext } from "../providers/DataProvider" 
 
-const TabArray = () =>{
+export default function TabArray (){
     const TabContext = useContext(DataContext);
     const { tabArray } = TabContext;
     
