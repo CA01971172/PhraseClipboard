@@ -57,7 +57,7 @@ function copyToClipboard(text: string): void{
 /* Provider定義 */
 type DataContextInfo = {
     tabArray: TabInfo[];
-    addTab: (tabName: string) => void;
+    addTab: (tabName?: string) => void;
     deleteTab: (tabIndex: number) => void;
     renameTab: (tabName: string, tabIndex: number) => void;
     setTexts: (text: string, tabIndex: number) => void;
