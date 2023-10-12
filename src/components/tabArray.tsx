@@ -1,15 +1,25 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { DataContext } from "../providers/DataProvider" 
 
 export default function TabArray (){
-    const TabContext = useContext(DataContext);
-    const { tabArray } = TabContext;
+    const { tabArray }= useContext(DataContext);
+    const [tabs, setTabArray] = useState(['タブ'])
     
+    const addTab = (tabName = 'タブ') => {
+        setTabArray([...tabs, tabName]);
+    }
+
     return (
-       <ul>
+       <div>
+        <ul>
             {Object.values(tabArray).map((tabData) => (
                 <li>{tabData.tabName}</li>
             ))}
-       </ul>
+            {tabs.map((tab, index) => (
+                <li key={index}>{tab}</li>
+           ))}
+        </ul>
+        <button onClick={() => addTab()}>+</button>
+       </div>
     );
   }
