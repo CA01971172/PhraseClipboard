@@ -1,9 +1,8 @@
 import React, { useContext } from 'react';
 import { DataContext } from "./../providers/DataProvider" 
 
-const TabContext = useContext(DataContext);
-
-const TabComponent = () =>{
+const TabArray = () =>{
+    const TabContext = useContext(DataContext);
     const { tabArray } = TabContext;
     
     return (
