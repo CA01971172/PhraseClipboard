@@ -19,14 +19,21 @@ type TabInfo = {
 async function getTabData(): Promise<TabInfo[]>{
     let initialData: TabInfo[] = []; //デフォルト値
     return new Promise<TabInfo[]>((resolve, reject) => {
-        chrome.storage.local.get(["data"], function(response: DataInfo){
-            try{
-                const tabs: TabInfo[] = response["data"]?.["tabs"] as TabInfo[] || [];
-                resolve(tabs);
-            }catch(error) {
-                resolve(initialData);
-            }
-        });
+        try{
+            chrome.storage.local.get(["data"], function(response: DataInfo){
+                try{
+                    const tabs: TabInfo[] = response["data"]?.["tabs"] as TabInfo[] || [];
+                    resolve(tabs);
+                }catch(error) {
+                    // データが存在しない場合、デフォルトデータを代わりに取得する
+                    resolve(initialData);
+                }
+            });
+        }catch(error){
+            // chrome.storageへアクセスできない場合のエラーハンドリング
+            console.error("chrome.storageへのアクセスに失敗しました\n", error);
+            resolve(initialData);
+        }
     });
 }
 

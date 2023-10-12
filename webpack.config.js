@@ -18,6 +18,12 @@ const config = {
   devServer: {
     open: true,
     host: "localhost",
+    port: "8081",
+    historyApiFallback: {
+      rewrites: [
+        { from: "/", to: "/popup.html" },
+      ],
+    },
   },
   plugins: [
     new HtmlWebpackPlugin({
