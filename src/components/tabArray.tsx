@@ -11,6 +11,7 @@ export default function TabArray (){
 
     return (
        <div>
+        <button onClick={() => addTab()}>+</button>
         <ul>
             {Object.values(tabArray).map((tabData) => (
                 <li>{tabData.tabName}</li>
@@ -19,7 +20,6 @@ export default function TabArray (){
                 <li key={index}>{tab}</li>
            ))}
         </ul>
-        <button onClick={() => addTab()}>+</button>
        </div>
     );
   }

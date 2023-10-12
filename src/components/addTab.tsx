@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function AddTabClick(){
+function AddTab(){
     const [tabArray, setTabArray] = useState(['タブ'])
     
     const addTab = (tabName = 'タブ') => {
