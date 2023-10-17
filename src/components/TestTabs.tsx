@@ -3,6 +3,9 @@ import { DataContext } from "../providers/DataProvider"
 
 export default function TestTabs (){
     const [text, setText] = useState<string>("");
+        const handleLiText = ( LiText:string ) => {
+        setText( LiText )
+    }
     const {
         tabArray,
         addTab,
@@ -12,7 +15,6 @@ export default function TestTabs (){
     return (
        <div>
             <button onClick={() => addTab()}>+</button>
-
             <input
                 type="text"
                 value={text}
@@ -28,7 +30,10 @@ export default function TestTabs (){
 
             <ul>
                 {Object.values(tabArray).map((tabData, index) => (
-                    <li key={index}>{tabData.tabName}</li>
+                    <li key={index} onClick ={() => handleLiText(tabData.tabName)} >
+                    {tabData.tabName}
+                    </li>
+                    
                 ))}
             </ul>
        </div>
