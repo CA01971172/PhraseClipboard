@@ -30,14 +30,19 @@ export default function TestTabs (){
                 renameTab(text, 0);
             }}>出力</button>
 
-            <button onClick={() => {
-                deleteTab(0)
-            }}>削除</button>
             <ul>
                 {Object.values(tabArray).map((tabData, index) => (
-                    <li key={index} onClick ={() => renameTab(text, index)}
-                    { ...() => deleteTab(index)} >
-                    {tabData.tabName}
+                    <li key={index}  >
+                        <span
+                            onClick ={() => {
+                                renameTab(text, index)
+                            }}
+                        >
+                            {tabData.tabName}
+                        </span>
+                        <button onClick={() => {
+                            deleteTab(index)
+                        }}>削除</button>
                     </li>
                 ))}
             </ul>
