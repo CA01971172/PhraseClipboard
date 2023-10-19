@@ -99,9 +99,12 @@ export function DataProvider({children}: {children: ReactNode}){
 
     // タブを削除する関数
     function deleteTab(tabIndex: number): void{
-        setTabArray(
-            tabArray.splice(tabIndex, 1)
-        )
+        setTabArray(prev => {
+            // 新しい配列を作成し、指定したindexの要素を削除
+            const newArray: TabInfo[] = [...prev];
+            newArray.splice(tabIndex, 1);
+            return newArray;
+        });
     }
 
     // タブ名を変更する関数
