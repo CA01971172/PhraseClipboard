@@ -1,4 +1,5 @@
 import React from 'react';
+import DropdownMenu from './DropdownMenu'
 // import { useContext } from "react";
 // import { DataContext } from '../providers/DataProvider';
 
@@ -15,6 +16,6 @@ export default function Popup(){
     // } = useContext(DataContext);
 
     return (
-        <div>hoge</div>
+        <div><DropdownMenu/></div>
     );
 }
