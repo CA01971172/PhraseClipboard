@@ -13,7 +13,7 @@
     ],
     "action": {
         "default_icon": "image/icon128.png",
-        "default_title": "PhraseClipper",
+        "default_title": "Phrase Clipboard",
         "default_popup": "popup.html"
     }
 }
