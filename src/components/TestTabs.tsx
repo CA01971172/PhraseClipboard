@@ -39,7 +39,7 @@ export default function TestTabs (){
                         >
                             {tabData.tabName}
                         </span>
-                        {tabData.tabName}
+                        
                         <button
                             onClick = {() => {
                                 setIsMenuOpen(!isMenuOpen);
