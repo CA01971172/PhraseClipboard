@@ -1,5 +1,4 @@
 import React from 'react';
-import DropdownMenu from './DropdownMenu'
 // import { useContext } from "react";
 // import { DataContext } from '../providers/DataProvider';
 import TestTabs from "./TestTabs"
@@ -17,6 +16,6 @@ export default function Popup(){
     // } = useContext(DataContext);
 
     return (
-        <div><DropdownMenu/>,<TestTabs/></div>
+        <div><TestTabs/></div>
     );
 }

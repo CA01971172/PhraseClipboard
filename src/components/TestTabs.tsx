@@ -1,17 +1,16 @@
 import React, { useState, useContext } from 'react';
 import { DataContext } from "../providers/DataProvider" 
 import { rename } from 'fs';
-import { Menu } from '@mui/material';
-import MenuItem from '@mui/material/MenuItem';
+import DropdownMenu from './DropdownMenu';
 
 export default function TestTabs (){
     const [text, setText] = useState<string>("");
+    const [isMenuOpen, setIsMenuOpen] = useState(false)
     
     const {
         tabArray,
         addTab,
         renameTab,
-        deleteTab
     }= useContext(DataContext);
 
     return (
@@ -32,7 +31,7 @@ export default function TestTabs (){
 
             <ul>
                 {Object.values(tabArray).map((tabData, index) => (
-                    <li key={index}  >
+                    <li key={index} >
                         <span
                             onClick ={() => {
                                 renameTab(text, index)
@@ -40,11 +39,18 @@ export default function TestTabs (){
                         >
                             {tabData.tabName}
                         </span>
-                        <button onClick={() => {
-                            deleteTab(index)
-                        }}>削除</button>
+                        {tabData.tabName}
+                        <button
+                            onClick = {() => {
+                                setIsMenuOpen(!isMenuOpen);
+                            }}
+                        >
+                            <DropdownMenu num={index} />
+                        </button>
+                        {isMenuOpen}
                     </li>
                 ))}
+            
             </ul>
        </div>
     );
