@@ -2,10 +2,9 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useRef, RefObject } from 'react';
 import DropdownMenu from './DropdownMenu';
 import { DataContext } from "../providers/DataProvider" 
-import { text } from 'stream/consumers';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -43,6 +42,8 @@ function a11yProps(index: number) {
 export default function TestTabs() {
   const [value, setValue] = React.useState(0);
   const [text, setText] = useState<string>("");
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const anchors: React.MutableRefObject<React.RefObject<HTMLDivElement>[]> = useRef<RefObject<HTMLDivElement>[]>([])
   const {
     tabArray,
     addTab,
@@ -53,11 +54,17 @@ export default function TestTabs() {
     setValue(newValue);
   };
 
+  const toggleMenu = () => {
+    // メニューをトグルする
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   return (
     <div>
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+        <Tabs value={value} onChange={handleChange} onClick={toggleMenu} 
+        aria-label="basic tabs example">
         {Object.values(tabArray).map((tabData, index) => (
         <Tab key={index} label={tabData.tabName} {...a11yProps(index)} />
         ))}
@@ -66,7 +73,12 @@ export default function TestTabs() {
 
       {Object.values(tabArray).map((tabData, index) => (
         <CustomTabPanel key={index} value={value} index={index}>
-
+        {isMenuOpen && <DropdownMenu 
+        num={index}
+        anchors={anchors}
+        open
+        handleTabChange={handleChange}
+        />}
         </CustomTabPanel>
       ))}
     </Box>
