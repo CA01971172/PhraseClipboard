@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
+import { v4 as uuidv4 } from "uuid";
 
 /* 型定義 */
 // storageから取得する、データ全体の型
@@ -10,6 +11,7 @@ type DataInfo = {
 
 // 個別タブの型
 type TabInfo = {
+    id: string;
     tabName: string;
     texts: string[];
 };
@@ -60,6 +62,7 @@ type DataContextInfo = {
     addTab: (tabName?: string) => void;
     deleteTab: (tabIndex: number) => void;
     renameTab: (tabName: string, tabIndex: number) => void;
+    swapTab(index: number, leftOrRight: 1 | -1): void;
     setTexts: (text: string, tabIndex: number) => void;
     copyText: (tabIndex: number, textIndex: number) => void;
     saveTabData: () => Promise<DataInfo>;
@@ -70,6 +73,7 @@ const initialContext: DataContextInfo = {
     addTab: () => {},
     deleteTab: () => {},
     renameTab: () => {},
+    swapTab: () => {},
     setTexts: () => {},
     copyText: () => {},
     saveTabData: () => Promise.resolve({})
@@ -91,6 +95,7 @@ export function DataProvider({children}: {children: ReactNode}){
     // タブを追加する関数
     function addTab(tabName: string = "タブ"): void{
         const newTab: TabInfo = {
+            id: uuidv4(),
             tabName,
             texts: []
         };
@@ -117,6 +122,22 @@ export function DataProvider({children}: {children: ReactNode}){
                 return tab;
             })
         )
+    }
+
+    // タブの順番を入れ替える関数
+    function swapTab(index: number, leftOrRight: 1|-1): void{
+        const newData: TabInfo[] = tabArray.slice();
+        
+        const nextIndex: number = index + leftOrRight;
+        if((0 > nextIndex) || (newData.length <= nextIndex)) throw new Error("これ以上は配列を動かせません");
+
+        // タブを入れ替える
+        const temp: TabInfo = newData[index];
+        newData[index] = newData[nextIndex];
+        newData[nextIndex] = temp;
+
+        // 入れ替えたタブのstateを更新
+        setTabArray(newData);
     }
 
     // 文字列を受け取って、文字列型配列としてタブのtextsに代入する関数
@@ -164,6 +185,7 @@ export function DataProvider({children}: {children: ReactNode}){
                 addTab,
                 deleteTab,
                 renameTab,
+                swapTab,
                 setTexts,
                 copyText,
                 saveTabData

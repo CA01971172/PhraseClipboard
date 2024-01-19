@@ -2,7 +2,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import React, { useState, useContext, useRef, RefObject } from 'react';
+import React, { useState, useContext, useRef, RefObject, createRef, useEffect, useCallback } from 'react';
 import DropdownMenu from './DropdownMenu';
 import { DataContext } from "../providers/DataProvider" 
 
@@ -39,19 +39,30 @@ function a11yProps(index: number) {
   };
 }
 
-export default function TestTabs() {
-  const [value, setValue] = React.useState(0);
+export default function TestTabs(props: {
+  focusedIndex: number;
+  setFocusedIndex: React.Dispatch<React.SetStateAction<number>>;
+}) {
+  const {
+    focusedIndex,
+    setFocusedIndex
+  } = props;
+
   const [text, setText] = useState<string>("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  // メニューを閉めるハンドル
+  const [closeHandlers, setCloseHandlers] = useState<(() => Promise<void>)[]>([]); 
+  const [opens, setOpens] = useState<boolean[]>([]); // メニューの開閉を管理
   const anchors: React.MutableRefObject<React.RefObject<HTMLDivElement>[]> = useRef<RefObject<HTMLDivElement>[]>([])
+  
   const {
     tabArray,
     addTab,
     renameTab,
   }= useContext(DataContext);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
+  const handleChange = (event: React.SyntheticEvent, nextIndex: number) => {
+    setFocusedIndex(nextIndex);
   };
 
   const toggleMenu = () => {
@@ -59,45 +70,67 @@ export default function TestTabs() {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  useEffect(() => {
+    if(tabArray){
+        const newOpens: boolean[] = [];
+        const newCloseHandlers: (() => Promise<void>)[] = [];
+        
+        for(let i: number = 0; i < tabArray.length; i++){
+            // opensを初期化する
+            newOpens[i] = (false);
+            // anchorsを初期化する
+            tabArray.forEach((_, index) => {
+                anchors.current[index] = createRef<HTMLDivElement>()
+            })
+            console.log(i)
+            // closeHandlersを初期化する
+            newCloseHandlers[i] = (() =>
+                new Promise<void>((resolve, reject) => {
+                    const copyOpens: boolean[] = [...opens];
+                    copyOpens[i]=(false);
+                    setOpens(copyOpens);
+                    console.log(i,
+                      anchors.current[i].current)
+                    resolve();
+                }
+            ));
+        }
+        setOpens(newOpens);
+        setCloseHandlers(newCloseHandlers);
+    }
+}, [tabArray]);
+
   return (
     <div>
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={value} onChange={handleChange} onClick={toggleMenu} 
+        <Tabs value={focusedIndex} onChange={handleChange} onClick={toggleMenu}
         aria-label="basic tabs example">
         {Object.values(tabArray).map((tabData, index) => (
-        <Tab key={index} label={tabData.tabName} {...a11yProps(index)} />
+          <Tab
+            ref={anchors.current[index]}
+            key={index}
+            label={tabData.tabName}
+            {...a11yProps(index)}
+          />
         ))}
         </Tabs>
       </Box>
 
       {Object.values(tabArray).map((tabData, index) => (
-        <CustomTabPanel key={index} value={value} index={index}>
-        {isMenuOpen && <DropdownMenu 
-        num={index}
-        anchors={anchors}
-        open
-        handleTabChange={handleChange}
-        />}
-        </CustomTabPanel>
+          (isMenuOpen && <DropdownMenu 
+            key={index}
+            num={index}
+            open
+            anchors={anchors}
+            handleTabChange={handleChange}
+            handleClose={closeHandlers[index]}
+            focusedIndex={focusedIndex}
+            setFocusedIndex={setFocusedIndex}
+          />)
       ))}
     </Box>
-    
     <button onClick={() => addTab()}>+</button>
-    
-    <button onClick={() => {
-      renameTab(text, 0);
-    }}>出力</button>
-
-    <input
-      type="text"
-      value={text}
-        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-          const newText: string = event.target.value;
-          console.log(`変更されました:`, );
-          setText(newText);
-    }}
-    />
   </div>
   );
 }
