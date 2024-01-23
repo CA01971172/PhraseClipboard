@@ -14,12 +14,19 @@ type TabInfo = {
     id: string;
     tabName: string;
     texts: string[];
+    holeText: string;
 };
+
+const initialTabArray: TabInfo[] = [{ //デフォルトデータ
+    id: "hoge",
+    tabName: "タブ",
+    texts: [""],
+    holeText: ""
+}]
 
 /* 関数定義 */
 // chrome.storageからタブのデータを取得する関数
 async function getTabData(): Promise<TabInfo[]>{
-    let initialData: TabInfo[] = []; //デフォルト値
     return new Promise<TabInfo[]>((resolve, reject) => {
         try{
             chrome.storage.local.get(["data"], function(response: DataInfo){
@@ -28,13 +35,13 @@ async function getTabData(): Promise<TabInfo[]>{
                     resolve(tabs);
                 }catch(error) {
                     // データが存在しない場合、デフォルトデータを代わりに取得する
-                    resolve(initialData);
+                    resolve(initialTabArray);
                 }
             });
         }catch(error){
             // chrome.storageへアクセスできない場合のエラーハンドリング
             console.error("chrome.storageへのアクセスに失敗しました\n", error);
-            resolve(initialData);
+            resolve(initialTabArray);
         }
     });
 }
@@ -64,6 +71,7 @@ type DataContextInfo = {
     renameTab: (tabName: string, tabIndex: number) => void;
     swapTab(index: number, leftOrRight: 1 | -1): void;
     setTexts: (text: string, tabIndex: number) => void;
+    setHoleText(text: string, tabIndex: number): void;
     copyText: (tabIndex: number, textIndex: number) => void;
     saveTabData: () => Promise<DataInfo>;
 }
@@ -75,6 +83,7 @@ const initialContext: DataContextInfo = {
     renameTab: () => {},
     swapTab: () => {},
     setTexts: () => {},
+    setHoleText: () => {},
     copyText: () => {},
     saveTabData: () => Promise.resolve({})
 };
@@ -83,7 +92,7 @@ export const DataContext = createContext<DataContextInfo>(initialContext);
 
 export function DataProvider({children}: {children: ReactNode}){
     // タブのデータを管理するstate
-    const [tabArray, setTabArray] = useState<TabInfo[]>([]);
+    const [tabArray, setTabArray] = useState<TabInfo[]>(initialTabArray);
 
     // storageのデータを取得し、タブのデータを初期化する
     useEffect(() => {
@@ -97,7 +106,8 @@ export function DataProvider({children}: {children: ReactNode}){
         const newTab: TabInfo = {
             id: uuidv4(),
             tabName,
-            texts: []
+            texts: [],
+            holeText: ""
         };
         setTabArray([...tabArray, newTab]);
     }
@@ -153,6 +163,18 @@ export function DataProvider({children}: {children: ReactNode}){
         )
     }
 
+    // 文字列を受け取って、タブのholeTextに代入する関数
+    function setHoleText(text: string, tabIndex: number): void{
+        setTabArray(
+            tabArray.map((tab, index) => {
+                if(index === tabIndex){
+                    tab.holeText = text;
+                }
+                return tab;
+            })
+        )
+    }
+
     // クリップボードにテキストをコピーする関数
     function copyText(tabIndex: number, textIndex: number): void{
         const text: string = tabArray[tabIndex].texts[textIndex];
@@ -187,6 +209,7 @@ export function DataProvider({children}: {children: ReactNode}){
                 renameTab,
                 swapTab,
                 setTexts,
+                setHoleText,
                 copyText,
                 saveTabData
             }}
