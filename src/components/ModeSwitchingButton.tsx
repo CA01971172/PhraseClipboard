@@ -20,6 +20,7 @@ export default function ModeSwitchingButton({
         renameTab,
         setTexts,
         setHoleText,
+        setAllTexts,
         copyText,
         saveTabData
     } = useContext(DataContext);
@@ -33,6 +34,12 @@ export default function ModeSwitchingButton({
         >
             <IconButton
                 onClick={() => {
+                    if(isEditing){
+                        // 編集モードを終了する場合、すべてのテキストを文字列型配列に変換してstateに代入する
+                        setAllTexts();
+                    }
+
+                    // 閲覧/編集モードを切り替える
                     setIsEditing((prev) => !prev);
                 }}
             >

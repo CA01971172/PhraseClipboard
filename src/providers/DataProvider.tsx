@@ -51,11 +51,6 @@ function convertTextToArray(text: string): string[]{
     return text.split(/\n/);
 }
 
-// 文字列型配列を複数行のテキストに変換する関数
-export function convertArrayToText(textArray: string[]): string{
-    return textArray.join("\n");
-}
-
 // クリップボードにテキストをコピーする関数
 function copyToClipboard(text: string): void{
     if(navigator.clipboard){
@@ -72,6 +67,7 @@ type DataContextInfo = {
     swapTab(index: number, leftOrRight: 1 | -1): void;
     setTexts: (text: string, tabIndex: number) => void;
     setHoleText(text: string, tabIndex: number): void;
+    setAllTexts(): void;
     copyText: (tabIndex: number, textIndex: number) => void;
     saveTabData: () => Promise<DataInfo>;
 }
@@ -84,6 +80,7 @@ const initialContext: DataContextInfo = {
     swapTab: () => {},
     setTexts: () => {},
     setHoleText: () => {},
+    setAllTexts: () => {},
     copyText: () => {},
     saveTabData: () => Promise.resolve({})
 };
@@ -163,6 +160,13 @@ export function DataProvider({children}: {children: ReactNode}){
         )
     }
 
+    // 全タブのholeTextを文字列型配列に変換してtextsに代入する関数
+    function setAllTexts(): void{
+        tabArray.forEach((value, index) => {
+            setTexts(value.holeText, index);
+        })
+    }
+
     // 文字列を受け取って、タブのholeTextに代入する関数
     function setHoleText(text: string, tabIndex: number): void{
         setTabArray(
@@ -209,6 +213,7 @@ export function DataProvider({children}: {children: ReactNode}){
                 renameTab,
                 swapTab,
                 setTexts,
+                setAllTexts,
                 setHoleText,
                 copyText,
                 saveTabData
