@@ -22,14 +22,13 @@ export default function ModeSwitchingButton({
     return (
         <div
             style={{
-                width: "fit-content",
-                border: "1px solid black"
+                width: "fit-content"
             }}
         >
             <IconButton
+                color="primary"
                 onClick={() => {
                     if(isEditing){
-                        console.log({tabArray})
                         // 編集モードを終了する場合、すべてのテキストを文字列型配列に変換してstateに代入する
                         saveTabData();
                     }else{

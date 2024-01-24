@@ -19,8 +19,8 @@ export default function TextPaletteView({focusedIndex}: {focusedIndex: number}){
                 <div
                     key={index}
                     style={{
-                        borderBottom: "solid 1px black",
-                        minHeight: "1rem"
+                        borderTop: ((index === 0) ? "" : "solid 1px white"),
+                        minHeight: "0.5rem"
                     }}
                 >
                     {text}

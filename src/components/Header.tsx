@@ -13,7 +13,7 @@ export default function Header({
             style={{
                 display: "flex",
                 justifyContent: "space-between",
-                borderBottom: "1px solid black"
+                borderBottom: "1px solid white"
             }}
         >
             <div/> {/* タブ要素をここに配置する予定 */}

@@ -226,7 +226,6 @@ export function DataProvider({children}: {children: ReactNode}){
         // タブごとにholeTextをtextsに変換してから保存する(holeTextは保存しない)
     async function saveTabData(): Promise<DataInfo>{
         const adjustedTabArray: TabInfo[] = removeHoleTexts();
-        console.log({tabArray, adjustedTabArray})
         return new Promise<DataInfo>((resolve, reject) => {
             try{
                 // chrome.storageに現在のデータを保存する
