@@ -15,14 +15,8 @@ export default function ModeSwitchingButton({
     // タブのデータを管理するcontext
     const {
         tabArray,
-        addTab,
-        deleteTab,
-        renameTab,
-        setTexts,
-        setHoleText,
-        setAllTexts,
-        copyText,
-        saveTabData
+        saveTabData,
+        generateHoleTexts
     } = useContext(DataContext);
 
     return (
@@ -35,9 +29,12 @@ export default function ModeSwitchingButton({
             <IconButton
                 onClick={() => {
                     if(isEditing){
-                        // 編集モードを終了する場合、すべてのテキストを文字列型配列に変換してstateに代入する
-                        setAllTexts();
                         console.log({tabArray})
+                        // 編集モードを終了する場合、すべてのテキストを文字列型配列に変換してstateに代入する
+                        saveTabData();
+                    }else{
+                        // 編集モードに移行する場合、すべての文字列型配列をテキストに変換してstateに代入する
+                        generateHoleTexts();
                     }
 
                     // 閲覧/編集モードを切り替える

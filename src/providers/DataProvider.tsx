@@ -14,13 +14,13 @@ type TabInfo = {
     id: string;
     tabName: string;
     texts: string[];
-    holeText: string;
+    holeText?: string;
 };
 
 const initialTabArray: TabInfo[] = [{ //デフォルトデータ
     id: "hoge",
     tabName: "タブ",
-    texts: [""],
+    texts: [],
     holeText: ""
 }]
 
@@ -48,11 +48,15 @@ async function getTabData(): Promise<TabInfo[]>{
 
 // 複数行のテキストを行ごとに配列に変換する関数
 function convertTextToArray(text: string): string[]{
-    return text.split(/\n/);
+    let result: string[] = [];
+    if(text !== ""){
+        result = text.split(/\n/);
+    }
+    return result;
 }
 
 // 文字列型配列を複数行のテキストに変換する関数
-export function convertArrayToText(textArray: string[]): string{
+function convertArrayToText(textArray: string[]): string{
     return textArray.join("\n");
 }
 
@@ -70,6 +74,7 @@ type DataContextInfo = {
     deleteTab: (tabIndex: number) => void;
     renameTab: (tabName: string, tabIndex: number) => void;
     swapTab(index: number, leftOrRight: 1 | -1): void;
+    generateHoleTexts(): void;
     setTexts: (text: string, tabIndex: number) => void;
     setHoleText(text: string, tabIndex: number): void;
     setAllTexts(): void;
@@ -84,6 +89,7 @@ const initialContext: DataContextInfo = {
     renameTab: () => {},
     swapTab: () => {},
     setTexts: () => {},
+    generateHoleTexts: () => {},
     setHoleText: () => {},
     setAllTexts: () => {},
     copyText: () => {},
@@ -152,6 +158,32 @@ export function DataProvider({children}: {children: ReactNode}){
         setTabArray(newData);
     }
 
+    // タブごとに文字列型配列を連結したテキストを作成し、holeTextに代入する関数
+    function generateHoleTexts(): void{
+        setTabArray((prev) => {
+            return prev.map((tabData) => {
+                const newHoleText: string = convertArrayToText(tabData.texts);
+                tabData.holeText = newHoleText;
+                return tabData;
+            })
+        })
+    }
+
+    // タブごとにテキストを文字列型配列に分割し、holeTextをデータから削除する関数
+    function removeHoleTexts(): TabInfo[]{
+        let result: TabInfo[] = [];
+        setTabArray((prev) => {
+            result = prev.map((tabData) => {
+                const newTexts: string[] = convertTextToArray(tabData.holeText ?? "");
+                tabData.texts = newTexts;
+                delete tabData.holeText;
+                return tabData;
+            })
+            return result;
+        })
+        return result;
+    }
+
     // 文字列を受け取って、文字列型配列としてタブのtextsに代入する関数
     function setTexts(text: string, tabIndex: number): void{
         const texts: string[] = convertTextToArray(text);
@@ -168,7 +200,7 @@ export function DataProvider({children}: {children: ReactNode}){
     // 全タブのholeTextを文字列型配列に変換してtextsに代入する関数
     function setAllTexts(): void{
         tabArray.forEach((value, index) => {
-            setTexts(value.holeText, index);
+            setTexts(value.holeText ?? "", index);
         })
     }
 
@@ -191,20 +223,23 @@ export function DataProvider({children}: {children: ReactNode}){
     }
 
     // chrome.storageに現在のデータを保存する関数
+        // タブごとにholeTextをtextsに変換してから保存する(holeTextは保存しない)
     async function saveTabData(): Promise<DataInfo>{
+        const adjustedTabArray: TabInfo[] = removeHoleTexts();
+        console.log({tabArray, adjustedTabArray})
         return new Promise<DataInfo>((resolve, reject) => {
             try{
                 // chrome.storageに現在のデータを保存する
                 const sendData: DataInfo = {
                     data: {
-                        tabs: tabArray
+                        tabs: adjustedTabArray
                     }
                 };
                 chrome.storage.local.set(sendData, function() {
                     resolve(sendData);
                 });
             }catch(error){
-                throw error;
+                console.error("chrome.storageへのアクセスに失敗しました\n", error);
             }
         });
     }
@@ -217,6 +252,7 @@ export function DataProvider({children}: {children: ReactNode}){
                 deleteTab,
                 renameTab,
                 swapTab,
+                generateHoleTexts,
                 setTexts,
                 setAllTexts,
                 setHoleText,

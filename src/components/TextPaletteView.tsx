@@ -17,8 +17,10 @@ export default function TextPaletteView({focusedIndex}: {focusedIndex: number}){
         >
             {tabArray[focusedIndex].texts.map((text, index) => (
                 <div
+                    key={index}
                     style={{
-                        borderBottom: "solid 1px black"
+                        borderBottom: "solid 1px black",
+                        minHeight: "1rem"
                     }}
                 >
                     {text}
