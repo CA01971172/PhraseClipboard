@@ -31,7 +31,7 @@ async function getTabData(): Promise<TabInfo[]>{
         try{
             chrome.storage.local.get(["data"], function(response: DataInfo){
                 try{
-                    const tabs: TabInfo[] = response["data"]?.["tabs"] as TabInfo[] || [];
+                    const tabs: TabInfo[] = response["data"]?.["tabs"] as TabInfo[] ?? initialTabArray;
                     resolve(tabs);
                 }catch(error) {
                     // データが存在しない場合、デフォルトデータを代わりに取得する
@@ -105,6 +105,7 @@ export function DataProvider({children}: {children: ReactNode}){
     // storageのデータを取得し、タブのデータを初期化する
     useEffect(() => {
         getTabData().then((response: TabInfo[]) => {
+            console.log({response})
             setTabArray(response);
         });
     }, []);
