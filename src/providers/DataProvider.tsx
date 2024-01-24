@@ -51,6 +51,11 @@ function convertTextToArray(text: string): string[]{
     return text.split(/\n/);
 }
 
+// 文字列型配列を複数行のテキストに変換する関数
+export function convertArrayToText(textArray: string[]): string{
+    return textArray.join("\n");
+}
+
 // クリップボードにテキストをコピーする関数
 function copyToClipboard(text: string): void{
     if(navigator.clipboard){

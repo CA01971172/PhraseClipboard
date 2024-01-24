@@ -37,6 +37,7 @@ export default function ModeSwitchingButton({
                     if(isEditing){
                         // 編集モードを終了する場合、すべてのテキストを文字列型配列に変換してstateに代入する
                         setAllTexts();
+                        console.log({tabArray})
                     }
 
                     // 閲覧/編集モードを切り替える
