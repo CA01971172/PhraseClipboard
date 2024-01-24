@@ -14,7 +14,6 @@ export default function ModeSwitchingButton({
 }){
     // タブのデータを管理するcontext
     const {
-        tabArray,
         saveTabData,
         generateHoleTexts
     } = useContext(DataContext);
