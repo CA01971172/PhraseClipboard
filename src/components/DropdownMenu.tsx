@@ -72,7 +72,7 @@ export default function DropdownMenu({
           }}>
           名前を変更
           </MenuItem>
-
+          
           <MenuItem
             onClick={(event: React.SyntheticEvent) => {
               swapTab(focusedIndex, -1); // 現在タブを左に移動する
