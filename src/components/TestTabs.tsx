@@ -3,6 +3,8 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import { useState, useContext, useRef, RefObject } from 'react'; 
+import { DataContext } from "../providers/DataProvider" 
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -39,29 +41,31 @@ function a11yProps(index: number) {
 
 export default function TestTabs() {
   const [value, setValue] = React.useState(0);
+  const [isopen, setisopen] = useState(false);
+  const anchors: React.MutableRefObject<React.RefObject<HTMLDivElement>[]> = useRef<RefObject<HTMLDivElement>[]>([]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
+  const {
+    tabArray,
+  }= useContext(DataContext);
+
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box sx={{ maxWidth: { xs: 320, sm: 480 }}}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-          <Tab label="Item One" {...a11yProps(0)} />
-          <Tab label="Item Two" {...a11yProps(1)} />
-          <Tab label="Item Three" {...a11yProps(2)} />
+        <Tabs>
+        {Object.values(tabArray).map((tabData, index) => (
+          <Tab
+            ref={anchors.current[index]}
+            key={index}
+            label={tabData.tabName}
+            {...a11yProps(index)}
+          />
+        ))}
         </Tabs>
       </Box>
-      <CustomTabPanel value={value} index={0}>
-        Item One
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={1}>
-        Item Two
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={2}>
-        Item Three
-      </CustomTabPanel>
     </Box>
   );
 }
