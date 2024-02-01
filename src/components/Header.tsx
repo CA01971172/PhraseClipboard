@@ -1,5 +1,6 @@
 import React, {Dispatch, SetStateAction} from 'react';
 import ModeSwitchingButton from "./ModeSwitchingButton";
+import TestTabs from "./TestTabs";
 
 export default function Header({
     isEditing,
@@ -16,7 +17,7 @@ export default function Header({
                 borderBottom: "1px solid white"
             }}
         >
-            <div/> {/* タブ要素をここに配置する予定 */}
+            <div><TestTabs /></div> {/* タブ要素をここに配置する予定 */}
             <ModeSwitchingButton
                 isEditing={isEditing}
                 setIsEditing={setIsEditing}
