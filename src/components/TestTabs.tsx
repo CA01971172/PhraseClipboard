@@ -3,8 +3,9 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { useState, useContext, useRef, RefObject } from 'react'; 
-import { DataContext } from "../providers/DataProvider" 
+import { useState, useContext, useRef, RefObject, Dispatch, SetStateAction } from 'react'; 
+import { DataContext } from "../providers/DataProvider";
+import DropdownMenu from "./DropdownMenu"
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -39,7 +40,13 @@ function a11yProps(index: number) {
   };
 }
 
-export default function TestTabs() {
+export default function TestTabs({
+  isEditing,
+  setIsEditing
+}: {
+  isEditing: boolean;
+  setIsEditing: Dispatch<SetStateAction<boolean>>;
+}) {
   const [value, setValue] = React.useState(0);
   const [isopen, setisopen] = useState(false);
   const anchors: React.MutableRefObject<React.RefObject<HTMLDivElement>[]> = useRef<RefObject<HTMLDivElement>[]>([]);
@@ -50,9 +57,11 @@ export default function TestTabs() {
 
   const {
     tabArray,
+    addTab
   }= useContext(DataContext);
 
   return (
+    <div>
     <Box sx={{ maxWidth: { xs: 320, sm: 480 }}}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
       <Tabs
@@ -63,15 +72,17 @@ export default function TestTabs() {
           aria-label="scrollable auto tabs example"
         >
         {Object.values(tabArray).map((tabData, index) => (
-          <Tab
+        <Tab
             ref={anchors.current[index]}
             key={index}
             label={tabData.tabName}
             {...a11yProps(index)}
-          />
+        />
         ))}
-      </Tabs>
+        {isEditing &&<button onClick={() => addTab()}>+</button>}
+        </Tabs>
       </Box>
     </Box>
+    </div>
   );
 }

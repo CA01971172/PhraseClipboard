@@ -17,7 +17,10 @@ export default function Header({
                 borderBottom: "1px solid white"
             }}
         >
-            <div><TestTabs /></div> {/* タブ要素をここに配置する予定 */}
+            <div><TestTabs 
+            isEditing={isEditing}
+            setIsEditing={setIsEditing}/>
+            </div> {/* タブ要素をここに配置する予定 */}
             <ModeSwitchingButton
                 isEditing={isEditing}
                 setIsEditing={setIsEditing}
