@@ -55,7 +55,13 @@ export default function TestTabs() {
   return (
     <Box sx={{ maxWidth: { xs: 320, sm: 480 }}}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs>
+      <Tabs
+          value={value}
+          onChange={handleChange}
+          variant="scrollable"
+          scrollButtons="auto"
+          aria-label="scrollable auto tabs example"
+        >
         {Object.values(tabArray).map((tabData, index) => (
           <Tab
             ref={anchors.current[index]}
@@ -64,7 +70,7 @@ export default function TestTabs() {
             {...a11yProps(index)}
           />
         ))}
-        </Tabs>
+      </Tabs>
       </Box>
     </Box>
   );
