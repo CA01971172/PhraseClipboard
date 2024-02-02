@@ -1,11 +1,14 @@
 import * as React from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { useState, useContext, useRef, RefObject, Dispatch, SetStateAction } from 'react'; 
 import { DataContext } from "../providers/DataProvider";
 import DropdownMenu from "./DropdownMenu"
+import Button from '@mui/material/Button';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -46,13 +49,32 @@ export default function TestTabs({
 }: {
   isEditing: boolean;
   setIsEditing: Dispatch<SetStateAction<boolean>>;
+},props:{
+  focusedIndex: number;
+  setFocusedIndex: React.Dispatch<React.SetStateAction<number>>;
 }) {
+  const {
+    focusedIndex,
+    setFocusedIndex
+  } = props;
+
   const [value, setValue] = React.useState(0);
   const [isopen, setisopen] = useState(false);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  
   const anchors: React.MutableRefObject<React.RefObject<HTMLDivElement>[]> = useRef<RefObject<HTMLDivElement>[]>([]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
+  };
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
   const {
@@ -65,7 +87,7 @@ export default function TestTabs({
     <Box sx={{ maxWidth: { xs: 320, sm: 480 }}}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
       <Tabs
-          value={value}
+          value={focusedIndex}
           onChange={handleChange}
           variant="scrollable"
           scrollButtons="auto"
@@ -81,6 +103,20 @@ export default function TestTabs({
         ))}
         {isEditing &&<button onClick={() => addTab()}>+</button>}
         </Tabs>
+        <Button
+        id="basic-button"
+        aria-controls={open ? 'basic-menu' : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? 'true' : undefined}
+        onClick={handleClick}
+        >
+        {Object.values(tabArray).map((tabData, index) => (
+        (isEditing && <DropdownMenu 
+        focusedIndex={focusedIndex}
+        setFocusedIndex={setFocusedIndex}
+        />)
+        ))}
+      </Button>
       </Box>
     </Box>
     </div>
