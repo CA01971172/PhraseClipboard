@@ -1,8 +1,6 @@
 import * as React from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { useState, useContext, useRef, RefObject, Dispatch, SetStateAction } from 'react'; 
@@ -44,29 +42,26 @@ function a11yProps(index: number) {
 }
 
 export default function TestTabs({
+  focusedIndex,
+  setFocusedIndex,
   isEditing,
   setIsEditing
 }: {
-  isEditing: boolean;
-  setIsEditing: Dispatch<SetStateAction<boolean>>;
-},props:{
   focusedIndex: number;
   setFocusedIndex: React.Dispatch<React.SetStateAction<number>>;
+  isEditing: boolean;
+  setIsEditing: Dispatch<SetStateAction<boolean>>;
 }) {
-  const {
-    focusedIndex,
-    setFocusedIndex
-  } = props;
 
-  const [value, setValue] = React.useState(0);
   const [isopen, setisopen] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const [opens, setOpens] = useState<boolean[]>([]);
   
   const anchors: React.MutableRefObject<React.RefObject<HTMLDivElement>[]> = useRef<RefObject<HTMLDivElement>[]>([]);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
+  const handleChange = (event: React.SyntheticEvent, nextIndex: number) => {
+    setFocusedIndex(nextIndex);
   };
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -75,6 +70,11 @@ export default function TestTabs({
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const toggle = () => {
+    setisopen(!isopen)
+    console.log(focusedIndex)
   };
 
   const {
@@ -89,6 +89,7 @@ export default function TestTabs({
       <Tabs
           value={focusedIndex}
           onChange={handleChange}
+          onClick={toggle}
           variant="scrollable"
           scrollButtons="auto"
           aria-label="scrollable auto tabs example"
@@ -101,23 +102,21 @@ export default function TestTabs({
             {...a11yProps(index)}
         />
         ))}
-        {isEditing &&<button onClick={() => addTab()}>+</button>}
+        {isEditing && <button onClick={() => addTab()}>+</button>}
         </Tabs>
-        <Button
-        id="basic-button"
-        aria-controls={open ? 'basic-menu' : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? 'true' : undefined}
-        onClick={handleClick}
-        >
+      </Box>
+
         {Object.values(tabArray).map((tabData, index) => (
-        (isEditing && <DropdownMenu 
+        (isopen && isEditing && index === focusedIndex 
+        &&<DropdownMenu 
+        open={opens[index]}
+        num={index}
+        anchors={anchors}
+        handleTabChange={handleChange}
         focusedIndex={focusedIndex}
         setFocusedIndex={setFocusedIndex}
         />)
         ))}
-      </Button>
-      </Box>
     </Box>
     </div>
   );

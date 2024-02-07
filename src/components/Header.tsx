@@ -1,4 +1,4 @@
-import React, {Dispatch, SetStateAction} from 'react';
+import React, {Dispatch, SetStateAction,useState} from 'react';
 import ModeSwitchingButton from "./ModeSwitchingButton";
 import TestTabs from "./TestTabs";
 
@@ -9,6 +9,7 @@ export default function Header({
     isEditing: boolean;
     setIsEditing: Dispatch<SetStateAction<boolean>>;
 }){
+    const [focusedIndex, setFocusedIndex] = useState<number>(0);
     return (
         <div
             style={{
@@ -18,8 +19,11 @@ export default function Header({
             }}
         >
             <div><TestTabs 
+            focusedIndex={focusedIndex}
+            setFocusedIndex={setFocusedIndex}
             isEditing={isEditing}
-            setIsEditing={setIsEditing}/>
+            setIsEditing={setIsEditing}
+            />
             </div> {/* タブ要素をここに配置する予定 */}
             <ModeSwitchingButton
                 isEditing={isEditing}
