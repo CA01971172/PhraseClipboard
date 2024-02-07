@@ -7,6 +7,8 @@ import { useState, useContext, useRef, RefObject, Dispatch, SetStateAction } fro
 import { DataContext } from "../providers/DataProvider";
 import DropdownMenu from "./DropdownMenu"
 import Button from '@mui/material/Button';
+import AddIcon from '@mui/icons-material/Add';
+import IconButton from '@mui/material/IconButton';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -101,9 +103,10 @@ export default function TestTabs({
             key={index}
             label={tabData.tabName}
             {...a11yProps(index)}
+            
         />
         ))}
-        {isEditing && <button onClick={() => addTab()}>+</button>}
+        {isEditing && <IconButton onClick={() => addTab()}><AddIcon/></IconButton>}
         </Tabs>
       </Box>
 
