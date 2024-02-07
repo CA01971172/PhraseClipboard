@@ -73,14 +73,15 @@ export default function TestTabs({
   };
 
   const toggle = () => {
-    setisopen(!isopen)
-    console.log(focusedIndex)
+    setisopen(!isopen);
   };
 
   const {
     tabArray,
     addTab
   }= useContext(DataContext);
+
+  console.log(isopen, isEditing)
 
   return (
     <div>
