@@ -6,7 +6,6 @@ import Box from '@mui/material/Box';
 import { useState, useContext, useRef, RefObject, Dispatch, SetStateAction } from 'react'; 
 import { DataContext } from "../providers/DataProvider";
 import DropdownMenu from "./DropdownMenu"
-import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import IconButton from '@mui/material/IconButton';
 
@@ -57,7 +56,6 @@ export default function TestTabs({
 
   const [isopen, setisopen] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
   const [opens, setOpens] = useState<boolean[]>([]);
   
   const anchors: React.MutableRefObject<React.RefObject<HTMLDivElement>[]> = useRef<RefObject<HTMLDivElement>[]>([]);
@@ -99,6 +97,7 @@ export default function TestTabs({
         >
         {Object.values(tabArray).map((tabData, index) => (
         <Tab
+            
             ref={anchors.current[index]}
             key={index}
             label={tabData.tabName}
@@ -109,10 +108,9 @@ export default function TestTabs({
         {isEditing && <IconButton onClick={() => addTab()}><AddIcon/></IconButton>}
         </Tabs>
       </Box>
-
         {Object.values(tabArray).map((tabData, index) => (
         (isopen && isEditing && index === focusedIndex 
-        &&<DropdownMenu 
+        && <DropdownMenu 
         open={opens[index]}
         num={index}
         anchors={anchors}

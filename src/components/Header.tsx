@@ -3,13 +3,16 @@ import ModeSwitchingButton from "./ModeSwitchingButton";
 import TestTabs from "./TestTabs";
 
 export default function Header({
+    focusedIndex,
+    setFocusedIndex,
     isEditing,
     setIsEditing
 }: {
+    focusedIndex: number;
+    setFocusedIndex: React.Dispatch<React.SetStateAction<number>>;
     isEditing: boolean;
     setIsEditing: Dispatch<SetStateAction<boolean>>;
 }){
-    const [focusedIndex, setFocusedIndex] = useState<number>(0);
     return (
         <div
             style={{

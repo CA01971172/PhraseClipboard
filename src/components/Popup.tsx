@@ -29,6 +29,8 @@ export default function Popup(){
                 }}
             >
                 <Header
+                    focusedIndex={focusedIndex}
+                    setFocusedIndex={setFocusedIndex}
                     isEditing={isEditing}
                     setIsEditing={setIsEditing}
                 />

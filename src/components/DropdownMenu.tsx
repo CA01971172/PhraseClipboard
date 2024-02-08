@@ -25,15 +25,13 @@ export default function DropdownMenu(
   setFocusedIndex
   }: Props) {
 
-  const [text, setText] = useState<string>("");
-
   const {
     swapTab
   } = useContext(DataContext) || [];
 
   const {
     renameTab,
-    deleteTab
+    deleteTab,
   } = useContext(DataContext);
 
   return (
@@ -47,7 +45,13 @@ export default function DropdownMenu(
             anchorEl={anchors.current[num]?.current}
             {...bindMenu(popupState)}
           >
-            <MenuItem onClick={()=>renameTab(text, focusedIndex) }>名前を変更</MenuItem>
+          <MenuItem onClick={() =>{
+            const text = prompt("新しい名前を入力してください。")
+            if(text === null) return 
+            renameTab(text,focusedIndex)
+          }}>
+          名前を変更
+          </MenuItem>
             <MenuItem onClick={()=>deleteTab(focusedIndex)}>削除</MenuItem>
             
             <MenuItem onClick={(event: React.SyntheticEvent) => {
